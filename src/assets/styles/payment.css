@@ -1,0 +1,257 @@
+.success-container {
+  max-width: 600px;
+
+  margin: 0 auto;
+
+  padding: 40px 24px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   SUCCESS ICON
+   ========================================================= */
+
+.success-icon {
+  width: 90px;
+
+  height: 90px;
+
+  margin: 0 auto 24px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #2dd36f;
+
+  color: white;
+
+  font-size: 48px;
+
+  font-weight: 700;
+
+  box-shadow: 0 8px 25px rgba(45, 211, 111, 0.25);
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.success-container h1 {
+  margin: 0;
+
+  font-size: 32px;
+
+  font-weight: 700;
+}
+
+.success-message {
+  margin-top: 10px;
+
+  margin-bottom: 30px;
+
+  font-size: 17px;
+
+  color: #777;
+}
+
+/* =========================================================
+   ORDER CARD
+   ========================================================= */
+
+.order-card {
+  padding: 22px;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+
+  text-align: left;
+}
+
+.order-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 10px 0;
+}
+
+.label {
+  color: #777;
+
+  font-size: 15px;
+}
+
+.value {
+  font-size: 16px;
+
+  font-weight: 600;
+
+  text-align: right;
+}
+
+.order-reference {
+  font-size: 14px;
+
+  max-width: 230px;
+
+  word-break: break-word;
+}
+
+.total {
+  font-size: 20px;
+}
+
+.divider {
+  height: 1px;
+
+  margin: 10px 0;
+
+  background: #e5e5e5;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status {
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.status-success {
+  background: #e5f9ed;
+
+  color: #1c9c50;
+}
+
+.status-pending {
+  background: #fff4d6;
+
+  color: #9a6b00;
+}
+
+.status-error {
+  background: #ffe5e5;
+
+  color: #c62828;
+}
+
+.status-default {
+  background: #eeeeee;
+
+  color: #666666;
+}
+
+/* =========================================================
+   DISPENSING CARD
+   ========================================================= */
+
+.dispensing-card {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  margin-top: 20px;
+
+  padding: 18px;
+
+  border-radius: 16px;
+
+  background: #f5f8ff;
+
+  text-align: left;
+}
+
+.dispensing-icon {
+  font-size: 34px;
+}
+
+.dispensing-card h2 {
+  margin: 0 0 4px;
+
+  font-size: 18px;
+}
+
+.dispensing-card p {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #777;
+}
+
+/* =========================================================
+   DONE BUTTON
+   ========================================================= */
+
+.done-button {
+  margin-top: 28px;
+
+  height: 56px;
+
+  font-size: 18px;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+  .success-container {
+    padding: 30px 16px;
+  }
+
+  .success-icon {
+    width: 80px;
+
+    height: 80px;
+
+    font-size: 42px;
+  }
+
+  .success-container h1 {
+    font-size: 28px;
+  }
+
+  .order-card {
+    padding: 16px;
+  }
+
+  .order-row {
+    gap: 10px;
+  }
+
+  .label {
+    font-size: 14px;
+  }
+
+  .value {
+    font-size: 14px;
+  }
+
+  .total {
+    font-size: 18px;
+  }
+}

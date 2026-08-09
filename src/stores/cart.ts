@@ -1,104 +1,84 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
 export interface Product {
-  id: number
-  name: string
-  price: number
-  image: string
+  product_id: number;
+  name: string;
+  description: string;
+  image: string;
+  sku: string;
+  price: number;
 }
 
 export interface CartItem extends Product {
-  quantity: number
+  quantity: number;
 }
 
-export const useCartStore = defineStore('cart', {
+export const useCartStore = defineStore("cart", {
   state: () => ({
-    items: [] as CartItem[]
+    items: [] as CartItem[],
   }),
 
   getters: {
-
     totalItems: (state) => {
-      return state.items.reduce(
-        (total, item) => total + item.quantity,
-        0
-      )
+      return state.items.reduce((total, item) => total + item.quantity, 0);
     },
 
     totalPrice: (state) => {
       return state.items.reduce(
         (total, item) => total + item.price * item.quantity,
-        0
-      )
-    }
-
+        0,
+      );
+    },
   },
 
   actions: {
-
     addToCart(product: Product) {
-
       const existingItem = this.items.find(
-        item => item.id === product.id
-      )
+        (item) => item.product_id === product.product_id,
+      );
 
       if (existingItem) {
-
-        existingItem.quantity++
-
+        existingItem.quantity++;
       } else {
-
         this.items.push({
           ...product,
-          quantity: 1
-        })
-
+          quantity: 1,
+        });
       }
     },
 
     removeFromCart(productId: number) {
-
       const index = this.items.findIndex(
-        item => item.id === productId
-      )
+        (item) => item.product_id === productId,
+      );
 
       if (index !== -1) {
-        this.items.splice(index, 1)
+        this.items.splice(index, 1);
       }
-
     },
 
     increaseQuantity(productId: number) {
-
-      const item = this.items.find(
-        item => item.id === productId
-      )
+      const item = this.items.find((item) => item.product_id === productId);
 
       if (item) {
-        item.quantity++
+        item.quantity++;
       }
-
     },
 
     decreaseQuantity(productId: number) {
+      const item = this.items.find((item) => item.product_id === productId);
 
-      const item = this.items.find(
-        item => item.id === productId
-      )
-
-      if (!item) return
+      if (!item) return;
 
       if (item.quantity > 1) {
-        item.quantity--
+        item.quantity--;
       } else {
-        this.removeFromCart(productId)
+        this.removeFromCart(productId);
       }
-
     },
 
     clearCart() {
-      this.items = []
-    }
-
-  }
-})
+      this.items = [];
+    },
+  },
+});

@@ -1,242 +1,183 @@
 <template>
   <ion-page>
-
+    <!-- HEADER -->
     <ion-header>
       <ion-toolbar>
-        <ion-title>My Cart</ion-title>
+        <ion-buttons slot="start">
+          <ion-button class="back-button" @click="goBack"> ← Back </ion-button>
+        </ion-buttons>
+
+        <ion-title> Your Cart </ion-title>
       </ion-toolbar>
     </ion-header>
-
+    <!-- CONTENT -->
     <ion-content>
+      <!-- EMPTY CART -->
+      <div v-if="cartStore.items.length === 0" class="empty-cart">
+        <div class="empty-cart-icon">🛒</div>
 
-      <div class="cart-container">
+        <h1>Your Cart is Empty</h1>
 
-        <h1>Your Order</h1>
+        <p>Choose some products to get started.</p>
 
-        <!-- Empty cart -->
-        <div
-          v-if="cartStore.items.length === 0"
-          class="empty-cart"
-        >
-          <h2>Your cart is empty</h2>
-
-          <ion-button @click="goHome">
-            Browse Products
-          </ion-button>
-        </div>
-
-        <!-- Cart items -->
-        <div v-else>
-
-          <div
-            v-for="item in cartStore.items"
-            :key="item.id"
-            class="cart-item"
-          >
-
-            <img
-              :src="item.image"
-              :alt="item.name"
-            />
-
-            <div class="item-info">
-
-              <h2>{{ item.name }}</h2>
-
-              <p>
-                ₱{{ item.price }}
-              </p>
-
-              <div class="quantity-controls">
-
-                <ion-button
-                  fill="outline"
-                  @click="cartStore.decreaseQuantity(item.id)"
-                >
-                  −
-                </ion-button>
-
-                <span>
-                  {{ item.quantity }}
-                </span>
-
-                <ion-button
-                  fill="outline"
-                  @click="cartStore.increaseQuantity(item.id)"
-                >
-                  +
-                </ion-button>
-
-              </div>
-
-            </div>
-
-            <div class="item-total">
-
-              <strong>
-                ₱{{ item.price * item.quantity }}
-              </strong>
-
-              <ion-button
-                fill="clear"
-                color="danger"
-                @click="cartStore.removeFromCart(item.id)"
-              >
-                Remove
-              </ion-button>
-
-            </div>
-
-          </div>
-
-          <!-- Total -->
-          <div class="cart-summary">
-
-            <h2>Total</h2>
-
-            <h1>
-              ₱{{ cartStore.totalPrice }}
-            </h1>
-
-            <ion-button
-              expand="block"
-              size="large"
-              @click="proceedToPayment"
-            >
-              Proceed to Payment
-            </ion-button>
-
-          </div>
-
-        </div>
-
+        <ion-button @click="continueShopping"> Continue Shopping </ion-button>
       </div>
 
-    </ion-content>
+      <!-- CART -->
+      <div v-else class="cart-container">
+        <h1>Your Cart</h1>
 
+        <!-- CART ITEMS -->
+        <div class="cart-items">
+          <div
+            v-for="item in cartStore.items"
+            :key="item.product_id"
+            class="cart-item">
+            <!-- IMAGE -->
+            <div class="cart-image-container">
+              <img
+                v-if="item.image"
+                :src="item.image"
+                :alt="item.name"
+                class="cart-image" />
+
+              <div v-else class="cart-no-image">No Image</div>
+            </div>
+
+            <!-- PRODUCT INFO -->
+            <div class="cart-product-info">
+              <h2>
+                {{ item.name }}
+              </h2>
+
+              <p class="cart-sku">SKU: {{ item.sku }}</p>
+
+              <p class="cart-price">
+                {{ formatPrice(item.price) }}
+              </p>
+            </div>
+
+            <!-- QUANTITY -->
+            <div class="quantity-section">
+              <ion-button
+                class="quantity-button"
+                @click="cartStore.decreaseQuantity(item.product_id)">
+                −
+              </ion-button>
+
+              <span class="quantity">
+                {{ item.quantity }}
+              </span>
+
+              <ion-button
+                class="quantity-button"
+                @click="cartStore.increaseQuantity(item.product_id)">
+                +
+              </ion-button>
+            </div>
+
+            <!-- ITEM TOTAL -->
+            <div class="item-total">
+              {{ formatPrice(item.price * item.quantity) }}
+            </div>
+
+            <!-- REMOVE -->
+            <ion-button
+              fill="clear"
+              color="danger"
+              class="remove-button"
+              @click="removeItem(item.product_id)">
+              🗑
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span> Items </span>
+
+            <span>
+              {{ cartStore.totalItems }}
+            </span>
+          </div>
+
+          <div class="summary-row">
+            <span> Subtotal </span>
+
+            <span>
+              {{ formatPrice(cartStore.totalPrice) }}
+            </span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="total-row">
+            <span> TOTAL </span>
+
+            <span>
+              {{ formatPrice(cartStore.totalPrice) }}
+            </span>
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="cart-actions">
+            <ion-button fill="outline" size="large" @click="continueShopping">
+              ← Continue Shopping
+            </ion-button>
+
+            <ion-button size="large" class="checkout-button" @click="checkout">
+              Checkout →
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </ion-content>
   </ion-page>
 </template>
 
-
 <script setup lang="ts">
-
 import {
   IonPage,
   IonHeader,
   IonToolbar,
   IonTitle,
   IonContent,
-  IonButton
-} from '@ionic/vue'
+  IonButton,
+  IonButtons,
+} from "@ionic/vue";
 
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
-import { useCartStore } from '../stores/cart'
+import { useCartStore } from "../stores/cart";
 
+import "../assets/styles/cart.css";
 
-const router = useRouter()
+const router = useRouter();
 
-const cartStore = useCartStore()
+const cartStore = useCartStore();
 
-
-function goHome() {
-
-  router.push('/home')
-
+function goBack() {
+  router.back();
 }
 
-
-function proceedToPayment() {
-
-  router.push('/payment')
-
+function continueShopping() {
+  router.push("/home");
 }
 
+function removeItem(productId: number) {
+  cartStore.removeFromCart(productId);
+}
+
+function formatPrice(price: number) {
+  return new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+    minimumFractionDigits: 2,
+  }).format(price);
+}
+
+function checkout() {
+  router.push("/checkout");
+}
 </script>
-
-
-<style scoped>
-
-.cart-container {
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
-}
-
-h1 {
-  text-align: center;
-}
-
-.empty-cart {
-  text-align: center;
-  margin-top: 80px;
-}
-
-.cart-item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  padding: 20px;
-  margin-bottom: 15px;
-
-  background: white;
-
-  border-radius: 15px;
-
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
-
-.cart-item img {
-  width: 120px;
-  height: 120px;
-
-  object-fit: cover;
-
-  border-radius: 10px;
-}
-
-.item-info {
-  flex: 1;
-}
-
-.item-info h2 {
-  margin: 0;
-}
-
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.quantity-controls span {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.item-total {
-  text-align: right;
-}
-
-.item-total strong {
-  font-size: 20px;
-}
-
-.cart-summary {
-  margin-top: 30px;
-
-  padding: 25px;
-
-  border-radius: 15px;
-
-  background: #f5f5f5;
-
-  text-align: right;
-}
-
-.cart-summary h1 {
-  font-size: 32px;
-}
-
-</style>
